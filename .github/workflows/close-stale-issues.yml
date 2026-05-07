@@ -1,0 +1,26 @@
+name: Close Stale Issues
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+
+permissions:
+  issues: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/stale-issue-cleanup@v6
+        with:
+          response-requested-label: response-requested
+          days-before-stale: 14
+          days-before-close: 5
+          stale-issue-label: closing-soon
+          stale-issue-message: |
+            This issue has not received a response in 14 days. If no further activity occurs within the next 5 days, it will be automatically closed.
+          close-issue-message: |
+            Closing this issue due to inactivity. If you believe this is still relevant, please open a new issue with updated information.
+          minimum-upvotes-to-exempt: 5
+          exempt-issue-labels: "bug,feature-request,p1"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
